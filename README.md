@@ -60,8 +60,8 @@ Final version of the application combining:
 | GET    | /api/products       | Get all products      | ❌   | -              |
 | GET    | /api/products/:id   | Get product by ID     | ❌   | -              |
 | POST   | /api/products       | Create product        | ✅   | user           |
-| PUT  | /api/products/:id   | Update product        | ✅   | owner/admin    |
-| DELETE | /api/products/:id   | Delete product        | ✅   | owner/admin    |
+| PUT    | /api/products/:id   | Update product        | ✅   | admin          |
+| DELETE | /api/products/:id   | Delete product        | ✅   | admin          |
 
 ---
 
