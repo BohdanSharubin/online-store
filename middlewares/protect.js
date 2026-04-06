@@ -1,34 +1,23 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const AppError = require("../errors/AppError");
+const asyncHandler = require("../middlewares/asyncHandler");
 
 const protect = async (req, res, next) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        success: false,
-        message: "Access denied. Token is missing",
-      });
-    }
-
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "User was not found",
-      });
-    }
-    req.user = user;
-    next();
-  } catch (err) {
-    res.status(401).json({
-      success: false,
-      message: "Invalid token",
-    });
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw AppError.unauthorized("Access denied. Token is missing");
   }
+
+  const token = authHeader.split(" ")[1];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  const user = await User.findById(decoded.id);
+  if (!user) {
+    throw AppError.unauthorized("User was not found");
+  }
+  req.user = user;
+  next();
 };
 
 module.exports = protect;
