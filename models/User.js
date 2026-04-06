@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  role: {
+    type: String,
+    trim: true,
+    default: 'user'
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);
