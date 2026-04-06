@@ -2,10 +2,10 @@
 
 ## 🚀 Description
 Final version of the application combining:
-- User registration
-- Authentication (JWT)
-- Error handling
-- Product CRUD
+- [User registration](https://github.com/BohdanSharubin/online-store/tree/feature/registration)
+- [Authentication (JWT)](https://github.com/BohdanSharubin/online-store/tree/feature/auth)
+- [Error handling](https://github.com/BohdanSharubin/online-store/tree/feature/error-handling)
+- [Product CRUD](https://github.com/BohdanSharubin/online-store/tree/feature/crud)
 
 ## 🧱 Architecture
 
