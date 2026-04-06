@@ -24,9 +24,14 @@ const productSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
-    required: [true, "Stock is required"], 
-    min: 0
-  }
+    required: [true, "Stock is required"],
+    min: 0,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);
