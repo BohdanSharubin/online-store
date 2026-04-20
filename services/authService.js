@@ -32,7 +32,6 @@ exports.loginUser = async ({ email, password }) => {
   if (!user) {
     throw AppError.unauthorized("Wrong email or password");
   }
-  console.log(user);
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw AppError.unauthorized("Wrong email or password");
