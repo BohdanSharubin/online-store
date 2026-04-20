@@ -3,6 +3,7 @@ const AppError = require("../errors/AppError");
 module.exports = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || "Server error";
+  let errors = err.errors;
 
   if (err instanceof AppError) {
     statusCode = err.statusCode;
@@ -21,6 +22,7 @@ module.exports = (err, req, res, next) => {
   return res.status(statusCode).json({
     success: false,
     message,
+    ...(Array.isArray(errors) && errors.length > 0 && {errors}),
     statusCode,
   });
 };
