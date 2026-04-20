@@ -3,7 +3,7 @@ const productService = require("../services/productService");
 
 exports.getAllProducts = asyncHandler(async (req, res) => {
   const { formattedProducts, total, page, limit } =
-    await productService.getAllProducts(req.query);
+    await productService.getAllProducts(req.validated.query);
   res.status(200).json({
     success: true,
     count: formattedProducts.length,

@@ -5,6 +5,7 @@ module.exports = (schema, property = "body") => {
     const { error, value } = schema.validate(req[property], {
       abortEarly: false,
       stripUnknown: true,
+      convert: true,
     });
     if (error) {
       const errors = error.details.map((detail) => ({
@@ -13,7 +14,8 @@ module.exports = (schema, property = "body") => {
       }));
       return next(AppError.badRequest("Data is not valid", errors));
     }
-    req[property] = value;
+    if (!req.validated) req.validated = {};
+    req.validated[property] = value;
     next();
   };
 };

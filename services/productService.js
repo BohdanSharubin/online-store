@@ -7,8 +7,6 @@ exports.getAllProducts = async ({ page, limit, category }) => {
   if (category) {
     filter["category"] = category;
   }
-  page = parseInt(page || 1);
-  limit = parseInt(limit || 10);
   const skip = (page - 1) * limit;
   const products = await Product.find(filter)
     .sort({ createdAt: -1 })
@@ -16,7 +14,7 @@ exports.getAllProducts = async ({ page, limit, category }) => {
     .limit(limit)
     .populate("createdBy", "name email");
 
-  const total = await Product.countDocuments();
+  const total = await Product.countDocuments(filter);
 
   const formattedProducts = products.map((product) => ({
     ...product.toObject(),
