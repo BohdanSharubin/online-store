@@ -1,83 +1,51 @@
-# Online Store REST API
+# Feature: Service Layer & Validation
 
 ## 🚀 Description
-Final version of the application combining:
-- [User registration](https://github.com/BohdanSharubin/online-store/tree/feature/registration)
-- [Authentication (JWT)](https://github.com/BohdanSharubin/online-store/tree/feature/auth)
-- [Error handling](https://github.com/BohdanSharubin/online-store/tree/feature/error-handling)
-- [Product CRUD](https://github.com/BohdanSharubin/online-store/tree/feature/crud)
-
-## 🧱 Architecture
-
-- Controllers — business logic
-- Models — database schemas
-- Routes — API endpoints
-- Middleware:
-  - protect (JWT auth)
-  - restrictedTo (role-based access)
-  - errorHandler (global error handling)
-  - asyncHandler
-- Utils:
-  - money(converts money to cents and reverse for saving in MongoDB and giving to client)
-- Errors:
-  - AppError 
-- server.js — main logic 
----
-
-## 🛠 Technologies
-
-- Node.js (v24)
-- Express.js (v5.2.1)
-- Mongoose (v9.4.1)
-- Dotenv (v17.4.1)
-- bcryptjs (v3.0.3)
-- jsonwebtoken (v9.0.3)
-
-## 🔐 Authentication
-
-- JWT-based authentication
-- Protected routes require token
-- Role-based authorization
+This feature introduces a service layer for business logic separation and Joi-based validation for incoming requests.
 
 ---
 
-## 📡 Routes
+## 🧱 Service Layer
 
-### 🔑 Auth
+Business logic has been moved out of controllers into dedicated service functions.
 
-| Method | Route              | Description           | Auth |
-|--------|--------------------|-----------------------|------|
-| POST   | /api/auth/register | Register user         | ❌   |
-| POST   | /api/auth/login    | Login user            | ❌   |
-| GET    | /api/auth/me       | Get current user      | ✅   |
+### Benefits:
+- Cleaner controllers
+- Reusable logic
+- Better separation of concerns
+- Easier testing
 
----
+### Example Flow:
 
-### 📦 Products
-
-| Method | Route               | Description           | Auth | Role           |
-|--------|---------------------|-----------------------|------|----------------|
-| GET    | /api/products       | Get all products      | ❌   | -              |
-| GET    | /api/products/:id   | Get product by ID     | ❌   | -              |
-| POST   | /api/products       | Create product        | ✅   | user           |
-| PUT    | /api/products/:id   | Update product        | ✅   | admin          |
-| DELETE | /api/products/:id   | Delete product        | ✅   | admin          |
+Request → Controller → Service → Database
 
 ---
 
-## ⚠️ Notes
+## ✅ Validation (Joi)
 
-- Prices are stored in **cents**
-- Centralized error handling is used
-- Mongoose validation applied
-- Middleware ensures security
+Joi is used to validate incoming data for:
+- request body
+- query parameters
+- route params
+
+Validation is handled via a reusable middleware.
 
 ---
 
-## 🧠 Summary
+## 🔧 Validation Middleware
 
-This project demonstrates:
-- Clean architecture
-- Proper error handling
-- Authentication & authorization
-- RESTful API design
+- Centralized validation logic
+- Automatically formats errors
+- Strips unknown fields
+- Applies default values
+
+### Error format:
+
+```json
+{
+  "success": false,
+  "message": "Data is not valid",
+  "errors": [
+    { "field": "name", "message": "name is required" }
+  ]
+}
