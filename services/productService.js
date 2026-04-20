@@ -2,11 +2,15 @@ const Product = require("../models/Product");
 const AppError = require("../errors/AppError");
 const money = require("../utils/money");
 
-exports.getAllProducts = async ({ page, limit }) => {
+exports.getAllProducts = async ({ page, limit, category }) => {
+  const filter = {};
+  if (category) {
+    filter["category"] = category;
+  }
   page = parseInt(page || 1);
   limit = parseInt(limit || 10);
   const skip = (page - 1) * limit;
-  const products = await Product.find()
+  const products = await Product.find(filter)
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
