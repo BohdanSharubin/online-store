@@ -28,11 +28,11 @@ exports.loginUser = async ({ email, password }) => {
     throw AppError.badRequest("Enter email and password");
   }
 
-  const user = User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email }).select("+password");
   if (!user) {
     throw AppError.unauthorized("Wrong email or password");
   }
-
+  console.log(user);
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw AppError.unauthorized("Wrong email or password");
