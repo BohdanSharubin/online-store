@@ -1,27 +1,12 @@
-const Product = require("../models/Product");
-const AppError = require("../errors/AppError");
 const asyncHandler = require("../middlewares/asyncHandler");
-const money = require("../utils/money");
+const productService = require("../services/productService");
 
 exports.getAllProducts = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page || 1);
-  const limit = parseInt(req.query.limit || 10);
-  const skip = (page - 1) * limit;
-  const products = await Product.find()
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit)
-    .populate("createdBy", "name email");
-
-  const total = await Product.countDocuments();
-
-  const formattedProducts = products.map((product) => ({
-    ...product.toObject(),
-    price: money.fromCents(product.price),
-  }));
+  const { formattedProducts, total, page, limit } =
+    await productService.getAllProducts(req.query);
   res.status(200).json({
     success: true,
-    count: products.length,
+    count: formattedProducts.length,
     total,
     totalPages: Math.ceil(total / limit),
     currentPage: page,
@@ -30,53 +15,35 @@ exports.getAllProducts = asyncHandler(async (req, res) => {
 });
 
 exports.getProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-
-  if (!product) {
-    throw AppError.notFound("Product not found");
-  }
+  const product = await productService.getProductById(req.params.id);
   res.status(200).json({
     success: true,
-    data: { ...product.toObject(), price: money.fromCents(product.price) },
+    data: product,
   });
 });
 
 exports.createProduct = asyncHandler(async (req, res) => {
-  const product = await Product.create({
-    ...req.body,
-    price: money.toCents(req.body.price),
-    createdBy: req.user._id,
-  });
+  const product = await productService.createProduct(req.body, req.user._id);
   res.status(201).json({
     success: true,
-    data: { ...product.toObject(), price: money.fromCents(product.price) },
+    data: product,
   });
 });
 
 exports.updateProduct = asyncHandler(async (req, res) => {
-  const updateData = { ...req.body };
-
-  if (updateData.price !== undefined) {
-    updateData.price = money.toCents(updateData.price);
-  }
-  const product = await Product.findByIdAndUpdate(req.params.id, updateData, {
-    new: true,
-    runValidators: true,
-  });
-  if (!product) {
-    throw AppError.notFound("Product not found");
-  }
+  const product = await productService.updateProduct(
+    req.params.id,
+    req.body,
+    req.user,
+  );
   res.status(200).json({
     success: true,
-    data: { ...product.toObject(), price: money.fromCents(product.price) },
+    data: product,
   });
 });
 
 exports.deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findByIdAndDelete(req.params.id);
-  if (!product) {
-    throw AppError.notFound("Product not found");
-  }
+  await productService.deleteProduct(req.params.id);
   res.status(200).json({
     success: true,
     message: "Product was deleted",
