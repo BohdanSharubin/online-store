@@ -1,0 +1,87 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Add new product</title>
+  </head>
+
+  <body>
+    <h1>Add product</h1>
+
+    <form id="createForm">
+      <input type="text" id="name" placeholder="Name" required />
+
+      <textarea
+        type="text"
+        id="description"
+        placeholder="Description"
+        required
+      ></textarea>
+
+      <input type="number" id="price" placeholder="Price in $" required />
+
+      <input type="text" id="category" placeholder="Category" required />
+
+      <input type="number" id="stock" placeholder="How many?" required />
+      <button type="submit">Додати</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+      window.addEventListener("load", async (e) => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "/login.html";
+
+          return;
+        }
+      });
+
+      document
+        .getElementById("createForm")
+
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const token = localStorage.getItem("token");
+          console.log(token);
+
+          if (!token) {
+            window.location.href = "/login.html";
+
+            return;
+          }
+
+          const body = {
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            price: Number(Document.getElementById("price")),
+            category: document.getElementById("category"),
+            stock: Number(document.getElementById("stock")),
+          };
+
+          const response = await fetch("/api/products", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(body),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            document.getElementById("message").textContent = data.message;
+            return;
+          }
+
+          document.getElementById("message").textContent = "Product was added!";
+          setTimeout(() => (window.location.href = "/index.html"), 1000);
+        });
+    </script>
+  </body>
+</html>

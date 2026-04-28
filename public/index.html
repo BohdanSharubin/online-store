@@ -1,0 +1,45 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Online store</title>
+  </head>
+
+  <body>
+    <h1>Products</h1>
+
+    <a href="/login.html">Увійти</a> |
+
+    <a href="/register.html">Реєстрація</a> |
+
+    <a href="/create.html">Додати фільм</a>
+
+    <button id="logoutBtn">Вийти</button>
+
+    <ul id="productList"></ul>
+
+    <script>
+ 
+      async function loadMovies() {
+        const response = await fetch("/api/products");
+        const data = await response.json();
+
+        const list = document.getElementById("productList");
+        list.innerHTML = data.data
+          .map((product) => `<li>${product.name} (${product.price}$) — ${product.stock}</li>`)
+          .join("");
+      }
+
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", () => {
+          localStorage.removeItem("token");
+          window.location.href = "/login.html";
+        });
+
+      loadMovies();
+    </script>
+  </body>
+</html>
