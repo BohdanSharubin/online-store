@@ -8,6 +8,7 @@ const asyncHandler = require("./middlewares/asyncHandler");
 const AppError = require("./errors/AppError");
 
 const app = express();
+app.use(express.static("public"));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
