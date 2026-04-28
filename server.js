@@ -15,7 +15,7 @@ app.use("/api/products", productRoutes);
 
 app.use(
   asyncHandler(async (req, res) => {
-    throw new AppError.notFound(`Route ${req.originalUrl} not found`);
+    throw AppError.notFound(`Route ${req.originalUrl} not found`);
   }),
 );
 app.use(errorHandler);
