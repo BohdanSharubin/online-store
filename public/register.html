@@ -1,0 +1,82 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Sign up</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+
+  <body>
+    <h1>Sign up</h1>
+
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <p id="name-error"></p>
+      <input type="email" id="email" placeholder="Email" required />
+      <p id="email-error"></p>
+      <input type="password" id="password" placeholder="Password" required />
+      <p id="password-error"></p>
+      <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Confirm password"
+        required
+      />
+      <p id="confirmPassword-error"></p>
+
+      <button type="submit">Sign up</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+      function showValidationErrors(errors) {
+        document.querySelectorAll('[id$="-error"]').forEach((element) => {
+          element.textContent = "";
+          element.classList.remove("error");
+        });
+
+        errors.forEach(({ field, error }) => {
+          const errorElement = document.getElementById(`${field}-error`);
+          if (errorElement) {
+            errorElement.textContent = error;
+            errorElement.classList.add("error");
+          }
+        });
+      }
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const body = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            confirmPassword: document.getElementById("confirmPassword").value,
+          };
+
+          const response = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            showValidationErrors(data.errors);
+            return;
+          }
+
+          localStorage.setItem("token", data.token);
+          document.getElementById("message").textContent =
+            "Registration successful!";
+
+          setTimeout(() => (window.location.href = "/index.html"), 1000);
+        });
+    </script>
+  </body>
+</html>

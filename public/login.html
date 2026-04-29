@@ -1,0 +1,63 @@
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Sign in</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <h1>Sign in</h1>
+
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <p id="email-error"></p>
+      <input type="password" id="password" placeholder="Password" required />
+      <p id="password-error"></p>
+      <button type="submit">Sign in</button>
+    </form>
+
+    <script>
+      function showValidationErrors(errors) {
+        document.querySelectorAll('[id$="-error"]').forEach((element) => {
+          element.textContent = "";
+          element.classList.remove("error");
+        });
+
+        errors.forEach(({ field, error }) => {
+          const errorElement = document.getElementById(`${field}-error`);
+          if (errorElement) {
+            errorElement.textContent = error;
+            errorElement.classList.add("error");
+          }
+        });
+      }
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const body = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+          };
+
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            showValidationErrors(data.errors);
+            return;
+          }
+
+          localStorage.setItem("token", data.token);
+          window.location.href = "/index.html";
+        });
+    </script>
+  </body>
+</html>

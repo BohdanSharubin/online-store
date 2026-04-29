@@ -1,0 +1,46 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Online store</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <h1>Products</h1>
+    <nav>
+      <a href="/login.html">Sign in</a>
+      <p>|</p>
+      <a href="/register.html">Sign up</a>
+      <p>|</p>
+      <a href="/create.html">Add product</a>
+      <p>|</p>
+      <button id="logoutBtn">Log out</button>
+    </nav>
+
+    <ul id="productList"></ul>
+
+    <script>
+      async function loadMovies() {
+        const response = await fetch("/api/products");
+        const data = await response.json();
+
+        const list = document.getElementById("productList");
+        list.innerHTML = data.data
+          .map(
+            (product) =>
+              `<li>${product.name} (${product.price}$) — ${product.stock}</li>`,
+          )
+          .join("");
+      }
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login.html";
+      });
+
+      loadMovies();
+    </script>
+  </body>
+</html>
