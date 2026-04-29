@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
 
     <title>Add new product</title>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
 
   <body>
@@ -31,36 +32,19 @@
     <p id="message"></p>
 
     <script>
-      window.addEventListener("load", async (e) => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          window.location.href = "/login.html";
-
-          return;
-        }
-      });
-
       document
         .getElementById("createForm")
-
         .addEventListener("submit", async (e) => {
           e.preventDefault();
 
           const token = localStorage.getItem("token");
-          console.log(token);
-
-          if (!token) {
-            window.location.href = "/login.html";
-
-            return;
-          }
 
           const body = {
             name: document.getElementById("name").value,
             description: document.getElementById("description").value,
-            price: Number(Document.getElementById("price")),
-            category: document.getElementById("category"),
-            stock: Number(document.getElementById("stock")),
+            price: Number(document.getElementById("price").value),
+            category: document.getElementById("category").value,
+            stock: Number(document.getElementById("stock").value),
           };
 
           const response = await fetch("/api/products", {

@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap");
+
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --border: #dddbd5;
+  --accent: #2563eb;
+  --accent-dk: #1d4ed8;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --danger: #dc2626;
+  --radius: 6px;
+  --transition: 0.18s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  padding: 0 1rem;
+}
+
+
+h1 {
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: -0.02em;
+  color: #2c16eed0;
+}
+
+nav {
+  display: flex;
+}
+
+nav a {
+  padding: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+nav a:hover {
+  color:#1d4ed8;
+}
+
+nav button {
+  width: fit-content;
+  height: fit-content;
+  margin: 5px 10px;
+  padding: 10px;
+  background-color: #f18989;
+  color:#3b3131;
+  border: solid #d14d4d;
+  border-radius: 10px;
+}
+
+nav p {
+  padding: 10px;
+}
+
+.page-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+}
+
+.page-wrapper--wide {
+  max-width: 860px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem 2.25rem;
+  margin-top: 1.75rem;
+}
+
+/* .navbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.navbar a {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color var(--transition);
+}
+
+.navbar a:hover {
+  color: var(--accent);
+} */
+
+.navbar-spacer {
+  flex: 1;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-top: 1.5rem;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.9375rem;
+  padding: 0.65rem 0.875rem;
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+textarea {
+  min-height: 100px;
+}
+
+button[type="submit"],
+.btn-primary {
+  font-family: "Syne", sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  letter-spacing: 0.03em;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    transform var(--transition);
+  align-self: flex-start;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover {
+  background: var(--accent-dk);
+  transform: translateY(-1px);
+}
+
+button[type="submit"]:active,
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition:
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.btn-ghost:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+
+.error {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--danger);
+  min-height: 1.25rem;
+}
+
+#productList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+#productList li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.125rem 1.25rem;
+  font-size: 0.9375rem;
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+#productList li:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+#productList li strong {
+  display: block;
+  font-family: "Syne", sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}

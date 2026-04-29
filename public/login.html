@@ -3,6 +3,7 @@
     <meta charset="UTF-8" />
 
     <title>Sign in</title>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
 
   <body>
@@ -10,13 +11,27 @@
 
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Пароль" required />
+      <p id="email-error"></p>
+      <input type="password" id="password" placeholder="Password" required />
+      <p id="password-error"></p>
       <button type="submit">Sign in</button>
     </form>
 
-    <p id="message"></p>
-
     <script>
+      function showValidationErrors(errors) {
+        document.querySelectorAll('[id$="-error"]').forEach((element) => {
+          element.textContent = "";
+          element.classList.remove("error");
+        });
+
+        errors.forEach(({ field, error }) => {
+          const errorElement = document.getElementById(`${field}-error`);
+          if (errorElement) {
+            errorElement.textContent = error;
+            errorElement.classList.add("error");
+          }
+        });
+      }
       document
         .getElementById("loginForm")
         .addEventListener("submit", async (e) => {
@@ -36,7 +51,7 @@
           const data = await response.json();
 
           if (!response.ok) {
-            document.getElementById("message").textContent = data.message;
+            showValidationErrors(data.errors);
             return;
           }
 
