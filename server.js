@@ -6,12 +6,14 @@ const errorHandler = require("./middlewares/errorHandler");
 const productRoutes = require("./routes/productRoutes");
 const asyncHandler = require("./middlewares/asyncHandler");
 const AppError = require("./errors/AppError");
+const clientRouter = require("./routes/clientRoutes");
 
 const app = express();
-app.use(express.static("public"));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/", clientRouter);
+app.use(express.static("public"));
 
 app.use(
   asyncHandler(async (req, res) => {
