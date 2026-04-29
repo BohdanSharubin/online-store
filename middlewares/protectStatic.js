@@ -13,7 +13,7 @@ const protectStatic = async (req, res, next) => {
 
   const user = await User.findById(decoded.id);
   if (!user) {
-    res.redirect("/login.html");
+    return res.redirect("/login.html");
   }
   req.user = user;
   next();
