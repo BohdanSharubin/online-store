@@ -7,9 +7,18 @@ const productRoutes = require("./routes/productRoutes");
 const asyncHandler = require("./middlewares/asyncHandler");
 const AppError = require("./errors/AppError");
 const clientRouter = require("./routes/clientRoutes");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const app = express();
+app.use(
+  cors({
+    origin: "process.env.CLIENT_URL" || "http://localhost:5500",
+    credentials: true,
+  }),
+);
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/", clientRouter);
