@@ -32,12 +32,11 @@
     <p id="message"></p>
 
     <script>
+      const BASE_URL = "http://localhost:3000";
       document
         .getElementById("createForm")
         .addEventListener("submit", async (e) => {
           e.preventDefault();
-
-          const token = localStorage.getItem("token");
 
           const body = {
             name: document.getElementById("name").value,
@@ -47,11 +46,11 @@
             stock: Number(document.getElementById("stock").value),
           };
 
-          const response = await fetch("/api/products", {
+          const response = await fetch(`${BASE_URL}/api/products`, {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(body),
           });
