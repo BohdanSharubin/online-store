@@ -22,8 +22,9 @@
     <ul id="productList"></ul>
 
     <script>
+      const BASE_URL = "http://localhost:3000";
       async function loadMovies() {
-        const response = await fetch("/api/products");
+        const response = await fetch(`${BASE_URL}/api/products?limit=100`);
         const data = await response.json();
 
         const list = document.getElementById("productList");
@@ -35,10 +36,15 @@
           .join("");
       }
 
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "/login.html";
-      });
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          await fetch(`${BASE_URL}/api/auth/logout`, {
+            method: "POST",
+            credentials: "include",
+          });
+          window.location.href = "/login.html";
+        });
 
       loadMovies();
     </script>
