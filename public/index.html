@@ -24,7 +24,7 @@
     <script>
       const BASE_URL = "http://localhost:3000";
       async function loadMovies() {
-        const response = await fetch(`${BASE_URL}/api/products`);
+        const response = await fetch(`${BASE_URL}/api/products?limit=100`);
         const data = await response.json();
 
         const list = document.getElementById("productList");
