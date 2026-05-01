@@ -4,13 +4,24 @@ const AppError = require("../errors/AppError");
 const asyncHandler = require("../middlewares/asyncHandler");
 
 const protect = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw AppError.unauthorized("Access denied. Token is missing");
+  let token = req.cookies.token;
+  if (!token) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    } else {
+      throw AppError.unauthorized("Access denied. Token is missing");
+    }
   }
-
-  const token = authHeader.split(" ")[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      throw AppError.unauthorized("Token has expired. Please log in again");
+    }
+  }
 
   const user = await User.findById(decoded.id);
   if (!user) {
