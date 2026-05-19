@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const reviewRouter = require("./reviewRoutes");
 
 const {
   getAllProducts,
@@ -37,5 +38,7 @@ router.delete(
   validate(idSchema, "params"),
   deleteProduct,
 );
+
+router.use("/:id/reviews", reviewRouter);
 
 module.exports = router;

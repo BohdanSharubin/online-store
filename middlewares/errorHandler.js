@@ -17,6 +17,9 @@ module.exports = (err, req, res, next) => {
   } else if (err.name === "JsonWebTokenError") {
     statusCode = 401;
     message = "Invalid token. Please log in again";
+  } else if( err.name === "MongoServerError") {
+    statusCode = 400;
+    message = "Can't create review on product with same user"
   }
   console.error(`${new Date().toISOString()} : ${err}`);
   return res.status(statusCode).json({
