@@ -13,71 +13,262 @@
 
     <form id="registerForm">
       <input type="text" id="name" placeholder="Name" required />
-      <p id="name-error"></p>
+      <span id="name-error" class="hidden"></span>
       <input type="email" id="email" placeholder="Email" required />
-      <p id="email-error"></p>
+      <span id="email-error" class="hidden"></span>
       <input type="password" id="password" placeholder="Password" required />
-      <p id="password-error"></p>
+      <span id="password-error" class="hidden"></span>
       <input
         type="password"
         id="confirmPassword"
         placeholder="Confirm password"
         required
       />
-      <p id="confirmPassword-error"></p>
+      <span id="confirmPassword-error" class="hidden"></span>
 
       <button type="submit">Sign up</button>
     </form>
 
-    <p id="message"></p>
+    <span id="message" class="hidden"></span>
 
     <script>
-      function showValidationErrors(errors) {
-        document.querySelectorAll('[id$="-error"]').forEach((element) => {
-          element.textContent = "";
-          element.classList.remove("error");
-        });
+      const BASE_URL = "http://localhost:3000";
 
-        errors.forEach(({ field, error }) => {
-          const errorElement = document.getElementById(`${field}-error`);
-          if (errorElement) {
-            errorElement.textContent = error;
-            errorElement.classList.add("error");
-          }
-        });
+      const form = document.getElementById("registerForm");
+
+      const nameInput = document.getElementById("name");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+
+      const submitButton = form.querySelector("button");
+
+      const messageElement = document.getElementById("message");
+
+      const errorsState = {};
+
+      function validateField(field, value) {
+        switch (field) {
+          case "name":
+            if (!value.trim()) {
+              return "Name is required";
+            }
+
+            if (value.trim().length < 2) {
+              return "Name must be at least 2 characters";
+            }
+
+            return "";
+
+          case "email":
+            if (!value.trim()) {
+              return "Email is required";
+            }
+
+            if (!/\S+@\S+\.\S+/.test(value)) {
+              return "Invalid email format";
+            }
+
+            return "";
+
+          case "password":
+            if (!value.trim()) {
+              return "Password is required";
+            }
+
+            if (value.length < 6) {
+              return "Password must be at least 6 characters";
+            }
+
+            return "";
+
+          case "confirmPassword":
+            if (!value.trim()) {
+              return "Confirm your password";
+            }
+
+            if (value !== passwordInput.value) {
+              return "Passwords do not match";
+            }
+
+            return "";
+
+          default:
+            return "";
+        }
       }
 
-      const BASE_URL = "http://localhost:3000";
-      document
-        .getElementById("registerForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
+      function showFieldError(field, error) {
+        const errorElement = document.getElementById(`${field}-error`);
+        const inputElement = document.getElementById(field);
 
-          const body = {
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
-            confirmPassword: document.getElementById("confirmPassword").value,
-          };
+        errorElement.textContent = error;
 
-          const response = await fetch(`${BASE_URL}/api/auth/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
+        if (error) {
+          errorElement.classList.add("error");
+          errorElement.classList.remove("hidden");
+          inputElement.classList.add("invalid");
+          inputElement.classList.remove("valid");
+
+          errorsState[field] = error;
+        } else {
+          errorElement.classList.remove("error");
+          errorElement.classList.add("hidden");
+          inputElement.classList.remove("invalid");
+          inputElement.classList.add("valid");
+
+          delete errorsState[field];
+        }
+
+        updateSubmitButtonState();
+      }
+
+      function showFormError(message) {
+        messageElement.textContent = message;
+        messageElement.classList.add("error");
+      }
+
+      function showSuccessMessage(message) {
+        messageElement.textContent = message;
+        messageElement.classList.remove("error");
+        messageElement.classList.add("success");
+      }
+
+      function clearMessage() {
+        messageElement.textContent = "";
+        messageElement.classList.remove("error");
+        messageElement.classList.remove("success");
+      }
+
+      function validateAllFields() {
+        const fields = [
+          {
+            name: "name",
+            value: nameInput.value,
+          },
+          {
+            name: "email",
+            value: emailInput.value,
+          },
+          {
+            name: "password",
+            value: passwordInput.value,
+          },
+          {
+            name: "confirmPassword",
+            value: confirmPasswordInput.value,
+          },
+        ];
+
+        fields.forEach(({ name, value }) => {
+          const error = validateField(name, value);
+          showFieldError(name, error);
+        });
+
+        return Object.keys(errorsState).length === 0;
+      }
+
+      function updateSubmitButtonState() {
+        const hasErrors = Object.keys(errorsState).length > 0;
+
+        const hasEmptyFields =
+          !nameInput.value.trim() ||
+          !emailInput.value.trim() ||
+          !passwordInput.value.trim() ||
+          !confirmPasswordInput.value.trim();
+
+        submitButton.disabled = hasErrors || hasEmptyFields;
+      }
+
+      nameInput.addEventListener("blur", () => {
+        showFieldError("name", validateField("name", nameInput.value));
+      });
+
+      emailInput.addEventListener("blur", () => {
+        showFieldError("email", validateField("email", emailInput.value));
+      });
+
+      passwordInput.addEventListener("blur", () => {
+        showFieldError(
+          "password",
+          validateField("password", passwordInput.value),
+        );
+
+        if (confirmPasswordInput.value) {
+          showFieldError(
+            "confirmPassword",
+            validateField("confirmPassword", confirmPasswordInput.value),
+          );
+        }
+      });
+
+      confirmPasswordInput.addEventListener("blur", () => {
+        showFieldError(
+          "confirmPassword",
+          validateField("confirmPassword", confirmPasswordInput.value),
+        );
+      });
+
+      [nameInput, emailInput, passwordInput, confirmPasswordInput].forEach(
+        (input) => {
+          input.addEventListener("input", () => {
+            clearMessage();
+            updateSubmitButtonState();
           });
+        },
+      );
 
-          const data = await response.json();
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        clearMessage();
 
-          if (!response.ok) {
-            showValidationErrors(data.errors);
+        const isValid = validateAllFields();
+
+        if (!isValid) {
+          return;
+        }
+
+        const body = {
+          name: nameInput.value,
+          email: emailInput.value,
+          password: passwordInput.value,
+          confirmPassword: confirmPasswordInput.value,
+        };
+
+        const response = await fetch(`${BASE_URL}/api/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (data.errors) {
+            data.errors.forEach(({ field, error }) => {
+              showFieldError(field, error);
+            });
             return;
           }
 
-          document.getElementById("message").textContent =
-            "Registration successful!";
+          if (data.message) {
+            showFormError(data.message);
+            return;
+          }
+          showFormError("Something went wrong");
+          return;
+        }
 
-          setTimeout(() => (window.location.href = "/index.html"), 1000);
-        });
+        showSuccessMessage("Registration successful!");
+
+        setTimeout(() => {
+          window.location.href = "/index.html";
+        }, 1000);
+      });
+
+      updateSubmitButtonState();
     </script>
   </body>
 </html>

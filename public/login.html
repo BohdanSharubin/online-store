@@ -11,53 +11,169 @@
 
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required />
-      <p id="email-error"></p>
+      <span id="email-error" class="hidden"></span>
       <input type="password" id="password" placeholder="Password" required />
-      <p id="password-error"></p>
+      <span id="password-error" class="hidden"></span>
+      <span id="loginForm-error" class="hidden"></span>
       <button type="submit">Sign in</button>
     </form>
 
     <script>
-      function showValidationErrors(errors) {
-        document.querySelectorAll('[id$="-error"]').forEach((element) => {
-          element.textContent = "";
-          element.classList.remove("error");
-        });
-
-        errors.forEach(({ field, error }) => {
-          const errorElement = document.getElementById(`${field}-error`);
-          if (errorElement) {
-            errorElement.textContent = error;
-            errorElement.classList.add("error");
-          }
-        });
-      }
       const BASE_URL = "http://localhost:3000";
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
 
-          const body = {
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
-          };
+      const form = document.getElementById("loginForm");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const submitButton = form.querySelector("button");
 
-          const response = await fetch(`${BASE_URL}/api/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          });
+      const errorsState = {};
 
-          const data = await response.json();
+      function validateField(field, value) {
+        switch (field) {
+          case "email":
+            if (!value.trim()) {
+              return "Email is required";
+            }
 
-          if (!response.ok) {
-            showValidationErrors(data.errors);
+            if (!/\S+@\S+\.\S+/.test(value)) {
+              return "Invalid email format";
+            }
+
+            return "";
+
+          case "password":
+            if (!value.trim()) {
+              return "Password is required";
+            }
+
+            if (value.length < 6) {
+              return "Password must be at least 6 characters";
+            }
+
+            return "";
+
+          default:
+            return "";
+        }
+      }
+
+      function showFieldError(field, error) {
+        clearFormErrors();
+        const errorElement = document.getElementById(`${field}-error`);
+        const inputElement = document.getElementById(field);
+
+        errorElement.textContent = error;
+
+        if (error) {
+          errorElement.classList.add("error");
+          errorElement.classList.remove("hidden");
+          inputElement.classList.add("invalid");
+          inputElement.classList.remove("valid");
+          errorsState[field] = error;
+        } else {
+          errorElement.classList.remove("error");
+          errorElement.classList.add("hidden");
+          inputElement.classList.remove("invalid");
+          inputElement.classList.add("valid");
+          delete errorsState[field];
+        }
+
+        updateSubmitButtonState();
+      }
+
+      function validateAllFields() {
+        clearFormErrors();
+        const fields = [
+          {
+            name: "email",
+            value: emailInput.value,
+          },
+          {
+            name: "password",
+            value: passwordInput.value,
+          },
+        ];
+
+        fields.forEach(({ name, value }) => {
+          const error = validateField(name, value);
+          showFieldError(name, error);
+        });
+
+        return Object.keys(errorsState).length === 0;
+      }
+
+      function clearFormErrors() {
+        const formError = document.getElementById("loginForm-error");
+        formError.textContent = "";
+        formError.classList.add("hidden");
+        delete errorsState["loginForm"];
+      }
+
+      function updateSubmitButtonState() {
+        const hasErrors = Object.keys(errorsState).length > 0;
+
+        const hasEmptyFields =
+          !emailInput.value.trim() || !passwordInput.value.trim();
+
+        submitButton.disabled = hasErrors || hasEmptyFields;
+      }
+
+      emailInput.addEventListener("blur", () => {
+        const error = validateField("email", emailInput.value);
+        showFieldError("email", error);
+      });
+
+      passwordInput.addEventListener("blur", () => {
+        const error = validateField("password", passwordInput.value);
+        showFieldError("password", error);
+      });
+
+      [emailInput, passwordInput].forEach((input) => {
+        input.addEventListener("input", updateSubmitButtonState);
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const isValid = validateAllFields();
+
+        if (!isValid) {
+          return;
+        }
+
+        const body = {
+          email: emailInput.value,
+          password: passwordInput.value,
+        };
+
+        const response = await fetch(`${BASE_URL}/api/auth/login`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (data.errors) {
+            data.errors.forEach(({ field, error }) => {
+              showFieldError(field, error);
+            });
             return;
           }
+          if (data.message) {
+            showFieldError("loginForm", data.message);
+            return;
+          }
+        }
 
-          window.location.href = "/index.html";
-        });
+        window.location.href = "/index.html";
+      });
+
+      updateSubmitButtonState();
     </script>
   </body>
 </html>
