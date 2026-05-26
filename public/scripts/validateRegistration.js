@@ -1,6 +1,6 @@
 import { validateField, showFieldError } from "./validation.js";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "";
 const form = document.getElementById("registerForm");
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");

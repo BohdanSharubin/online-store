@@ -14,6 +14,12 @@ const healthRoutes = require("./routes/healthRoutes");
 
 const app = express();
 
+app.use(
+  cors({
+    origin: true,
+    credentials: "include",
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));

@@ -1,6 +1,6 @@
 import { validateField, showFieldError } from "./validation.js";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "";
 const form = document.getElementById("reviewForm");
 const commentInput = document.getElementById("comment");
 const submitButton = form.querySelector("button");
