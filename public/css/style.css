@@ -187,7 +187,6 @@ button[type="submit"]:active,
 }
 
 .error {
-  /* margin-top: 0.75rem; */
   font-size: 0.875rem;
   color: var(--danger);
   min-height: 1.25rem;
@@ -304,6 +303,9 @@ button:disabled {
 #message {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: #16a34a;
   min-height: 1.25rem;
+}
+
+.success {
+  color: var(--valid);
 }
