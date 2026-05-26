@@ -14,7 +14,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5500",
+    origin: true,
     credentials: true,
   }),
 );
@@ -36,7 +36,7 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(process.env.PORT || 3000, () => {
+    app.listen(process.env.PORT, "0.0.0.0", () => {
       console.log("Server is running");
     });
   })
