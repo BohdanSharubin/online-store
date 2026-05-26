@@ -20,7 +20,7 @@
     </nav>
 
     <ul id="productList"></ul>
-
+    <img src="./assets/reviews.png" alt="Add Review" width="20" height="20" />
     <script>
       const BASE_URL = "http://localhost:3000";
       async function loadMovies() {
@@ -30,8 +30,46 @@
         const list = document.getElementById("productList");
         list.innerHTML = data.data
           .map(
-            (product) =>
-              `<li>${product.name} (${product.price}$) — ${product.stock}</li>`,
+            (product) => `
+              <li class="product-card">
+                <div class="product-card-content">
+                  <div class="product-header">
+                    <h3>${product.name}</h3>
+
+                    <a
+                      class="review-link"
+                      href="/add-review?productId=${product._id}"
+                      title="Add review"
+                    >
+                      <img
+                        src="/assets/reviews.png"
+                        alt="Add review"
+                        width="20"
+                        height="20"
+                      />
+                    </a>
+                  </div>
+
+                  <p class="product-description">
+                    ${product.description || "No description"}
+                  </p>
+
+                  <div class="product-meta">
+                    <span class="price">
+                      $${product.price}
+                    </span>
+
+                    <span class="stock ${product.stock === 0 ? "out" : ""}">
+                      ${
+                        product.stock === 0
+                          ? "Out of stock"
+                          : `In stock: ${product.stock}`
+                      }
+                    </span>
+                  </div>
+                </div>
+              </li>
+              `,
           )
           .join("");
       }
