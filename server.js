@@ -34,12 +34,13 @@ app.use(
 );
 app.use(errorHandler);
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB connected");
-    app.listen(process.env.PORT, "0.0.0.0", () => {
-      console.log("Server is running");
-    });
-  })
-  .catch((err) => console.error(err));
+const PORT = Number(process.env.PORT) || 3000;
+app.listen(PORT, () => {
+  console.log("Server is running");
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log("MongoDB connected");
+    })
+    .catch((err) => console.error(err));
+});
