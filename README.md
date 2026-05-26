@@ -10,77 +10,54 @@ Final version of the application combining:
 - [Client-side pages](https://github.com/BohdanSharubin/online-store/tree/feature/client-side)
 - [CORS support](https://github.com/BohdanSharubin/online-store/tree/feature/cors)
 - [Review system](https://github.com/BohdanSharubin/online-store/tree/feature/model-reviews)
-
+- [Logging system](https://github.com/BohdanSharubin/online-store/tree/feature/logger)
 ---
 
 ## 🆕 Recent Updates
 
-### 🔧 Service Layer
-- Moved business logic from controllers to services
-- Improved code structure and readability
-- Enabled easier testing and reuse of logic
+### 📝 Logging System (Winston & Morgan)
+- Integrated **Winston** for centralized application logging.
+- Integrated **Morgan** for HTTP request logging.
+- Configured separate logging environments:
+  - **Development**: Detailed colorized console logs.
+  - **Production**: Structured file logging (errors and combined logs) for persistent monitoring.
 
-### ✅ Validation (Joi)
-- Added Joi validation for:
-  - request body
-  - query parameters
-  - route params
-  - Product model
-  - authorization and registration
-- Introduced reusable validation middleware
-- Implemented structured error responses
+### ⭐ Enhanced Review System & Frontend
+- Added a new `Review` model with a complete architecture (Joi validation, Controller, Service, and Router).
+- Fully integrated frontend views for interacting with reviews.
+- Added dynamic client-side pages for viewing and submitting feedback.
 
-### 🌐 CORS Support
-- Added CORS middleware
-- Enabled cross-origin requests between frontend and backend
+### 🔧 Service Layer & Validation (Joi)
+- Moved business logic from controllers to services for better testability and reuse.
+- Added robust Joi validation middleware for request bodies, query parameters, and route components.
 
-### 🖥 Client Pages
-Added static client pages using `express.static()`:
-
-- Login page
-- Registration page
-- Add product page
-- Product list page
-
-### ⭐ Review System
-Added a new `Review` model with:
-- Joi validation schema
-- Controller layer
-- Service layer
-- Router
-
-Reviews support:
-- Creating reviews
-- Fetching reviews
-- Product-user relation handling
-
-### 📡 Query Features
-- Pagination (`page`, `limit`)
-- Filtering by category
+### 🌐 CORS & Routing Fixes
+- Configured CORS middleware for seamless backend-frontend communication.
+- Patched catch-all client routing to comply with the latest strict string parsers.
 
 ---
 
 ## 🧱 Architecture
 
-- Controllers — handle request/response
-- Services — business logic
-- Models — database schemas
-- Routes — API endpoints
-- Middleware:
-  - protect (JWT auth)
-  - restrictedTo (role-based access)
-  - errorHandler (global error handling)
-  - asyncHandler
-  - validate (Joi validation)
-- Validators:
-  - authValidation (Joi schema for authentication)
-  - productValidation (Joi schema for product)
-  - reviewValidation
-- Utils:
-  - money (convert to/from cents)
-- Errors:
-  - AppError 
-- server.js — main logic 
+- **Controllers** — handle HTTP requests & responses.
+- **Services** — encapsulate core business logic.
+- **Models** — define database schemas (Mongoose).
+- **Routes** — API endpoints mapping.
+- **Middleware**:
+  - `protect` (JWT auth validation)
+  - `restrictedTo` (role-based access control)
+  - `errorHandler` (global centralized error handling)
+  - `asyncHandler` (unhandled promise wrapper)
+  - `validate` (Joi schema validation runner)
+- **Validators**:
+  - `authValidation`, `productValidation`, `reviewValidation` (Joi schemas)
+- **Config & Logging**:
+  - `winston` logger configuration.
+- **Utils**:
+  - `money` (handles precision by converting to/from cents).
+- **Errors**:
+  - `AppError` (custom operational error class).
+- `server.js` — main application entry point.
 
 ---
 
@@ -93,6 +70,8 @@ Reviews support:
 - bcryptjs (v3.0.3)
 - jsonwebtoken (v9.0.3)
 - Joi (v18.1.2)
+- Winston (v3.17.0)
+- Morgan (v1.10.0)
 - cors
 - cookie-parser
 
@@ -100,84 +79,76 @@ Reviews support:
 
 ## 🔐 Authentication
 
-- JWT-based authentication
-- Protected routes require token
-- Role-based authorization
+- JWT-based authentication via HTTP-Only cookies or headers.
+- Protected routes require a valid token.
+- Role-based authorization (`user`, `admin`).
 
 ---
 
-## 📡 Routes
+## 📡 Routes & Client Pages
 
-### 🔑 Auth
+### 🔑 Auth Endpoints
 
 | Method | Route              | Description           | Auth |
 |--------|--------------------|-----------------------|------|
-| POST   | /api/auth/register | Register user         | ❌   |
-| POST   | /api/auth/login    | Login user            | ❌   |
-| GET    | /api/auth/me       | Get current user      | ✅   |
+| POST   | /api/auth/register | Register user         | ❌    |
+| POST   | /api/auth/login    | Login user            | ❌    |
+| GET    | /api/auth/me       | Get current user      | ✅    |
 
----
-
-### 📦 Products
+### 📦 Products Endpoints
 
 | Method | Route               | Description              | Auth | Role   |
 |--------|---------------------|--------------------------|------|--------|
-| GET    | /api/products       | Get all products         | ❌   | -      |
-| GET    | /api/products/:id   | Get product by ID        | ❌   | -      |
-| POST   | /api/products       | Create product           | ✅   | user   |
-| PUT    | /api/products/:id   | Update product           | ✅   | admin  |
-| DELETE | /api/products/:id   | Delete product           | ✅   | admin  |
+| GET    | /api/products       | Get all products         | ❌    | -      |
+| GET    | /api/products/:id   | Get product by ID        | ❌    | -      |
+| POST   | /api/products       | Create product           | ✅    | user   |
+| PUT    | /api/products/:id   | Update product           | ✅    | admin  |
+| DELETE | /api/products/:id   | Delete product           | ✅    | admin  |
 
-#### 🔍 Query Parameters
+#### 🔍 Query Parameters for Products
+- `page`: Page number (default: `1`)
+- `limit`: Items per page (default: `10`)
+- `category`: Filter by category name
 
-| Param     | Description              |
-|-----------|--------------------------|
-| page      | Page number (default: 1) |
-| limit     | Items per page (default: 10) |
-| category  | Filter by category       |
+*Example:* `GET /api/products?page=1&limit=5&category=Electronics`
 
-Example:
-`
-GET /api/products?page=1&limit=5&category=Electronics 
-`
+### ⭐ Reviews Endpoints
 
-### ⭐ Reviews
-| Method | Route            | Description      | Auth |
-| ------ | ---------------- | ---------------- | ---- |
-| GET    | /api/products/:productId/reviews     | Get all reviews for a product with productId  | ❌    |
-| POST   | /api/products/:productId/reviews     | Create review for a product with productId   | ✅    |
-| DELETE | /api/products/:productId/reviews/:id | Delete review with id on product with productId    | ✅    |
+| Method | Route                                | Description                                      | Auth |
+|--------|--------------------------------------|--------------------------------------------------|------|
+| GET    | /api/products/:productId/reviews     | Get all reviews for a specific product            | ❌    |
+| POST   | /api/products/:productId/reviews     | Create a new review for a product                 | ✅    |
+| DELETE | /api/products/:productId/reviews/:id | Delete a specific review by its ID               | ✅    |
 
+### 🖥 Client Pages (Served from `/public`)
 
-### 🖥Client Pages
-| Page              | Description            |
-| ----------------- | ---------------------- |
-| /login.html       | User login page        |
-| /register.html    | User registration page |
-| /products.html    | Product list page      |
-| /add-product.html | Create product page    |
+Frontend logic communicates with backend APIs using a configurable `BASE_URL` (e.g., `http://localhost:3000`).
+
+| Page                 | Description                                                 |
+|----------------------|-------------------------------------------------------------|
+| `/login.html`        | User login page                                             |
+| `/register.html`     | User registration page                                      |
+| `/index.html`     | Product list page (with sorting and pagination)             |
+| `/add-product.html`  | Create product page (Admin authorized)                     |
+| `/reviews.html` | Lists all customer reviews for a given product           |
+| `/add-review.html`   | Form page to submit a new review and rating for a product   |
 
 ---
 
-## ⚠️ Notes
+## ⚠️ Technical Notes
 
-- Prices are stored in **cents**
-- Centralized error handling is used
-- Joi ensures request validation
-- Mongoose handles schema validation
-- Middleware ensures security and data integrity
-- Static frontend pages are served from /public
+- **Environment Config**: Server setup uses `dotenv` to separate development and production states.
+- **Logging Strategy**: Console logs are silenced in production; instead, logs write directly to `.log` files via Winston.
+- **Currency Handling**: Prices are consistently processed in **cents** to eliminate floating-point math issues.
+- **Data Integrity**: Request validations occur at the gateway layer (Joi) before ever hitting Mongoose schema validations.
+
 ---
 
 ## 🧠 Summary
 
-This project demonstrates:
-- Clean architecture (Controller → Service → DB)
-- RESTful API design
-- Authentication & authorization
-- Request validation
-- Error handling
-- Service layer architecture
-- Static frontend integration
-- Cross-origin communication
-- Review management system
+This project demonstrates a production-ready setup including:
+- Clean architecture (**Controller → Service → Data Access Layer**).
+- RESTful API best practices.
+- Multi-environment **Winston & Morgan logging**.
+- Seamless Request-Response schema validations.
+- Static frontend integration with dynamic cross-origin API binding.
