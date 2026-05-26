@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reviews</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <nav>
+      <a href="/">← Products</a>
+    </nav>
+
+    <div class="reviews-header">
+      <div>
+        <h1>Reviews</h1>
+        <p id="product-name">Loading…</p>
+      </div>
+      <div class="review-box">
+        <span id="reviews-count"></span>
+        <button
+          id="addReviewBtn"
+          class="add-review-btn"
+        >
+          Add review
+        </button>
+      </div>
+    </div>
+
+    <ul class="review-list" id="reviewList"></ul>
+
+    <script type="module" src="/scripts/renderReviews.js"></script>
+  </body>
+</html>
