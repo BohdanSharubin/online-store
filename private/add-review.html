@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add Review</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <h1>Add Review</h1>
+    <nav>
+      <a href="/index.html">← Products</a>
+    </nav>
+
+    <p id="product-name">Loading product…</p>
+
+    <form id="reviewForm">
+      <span class="rating-label">Your rating</span>
+      <div class="rating-group" id="ratingGroup">
+        <input type="radio" name="rating" id="star5" value="5" />
+        <label for="star5" title="5 stars">★</label>
+        <input type="radio" name="rating" id="star4" value="4" />
+        <label for="star4" title="4 stars">★</label>
+        <input type="radio" name="rating" id="star3" value="3" />
+        <label for="star3" title="3 stars">★</label>
+        <input type="radio" name="rating" id="star2" value="2" />
+        <label for="star2" title="2 stars">★</label>
+        <input type="radio" name="rating" id="star1" value="1" />
+        <label for="star1" title="1 star">★</label>
+      </div>
+      <p id="rating-error" class="error"></p>
+
+      <textarea
+        id="comment"
+        placeholder="Share your experience"
+        maxlength="500"
+      ></textarea>
+      <p class="char-counter"><span id="charCount">0</span> / 500</p>
+      <p id="comment-error" class="error"></p>
+
+      <button type="submit">Submit Review</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script type="module" src="/scripts/validateReview.js"></script>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Add new product</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+
+  <body>
+    <h1>Add product</h1>
+    <nav>
+      <a href="/index.html">← Products</a>
+    </nav>
+
+    <form id="createForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <span id="name-error" class="hidden"></span>
+
+      <textarea
+        type="text"
+        id="description"
+        placeholder="Description"
+        required
+      ></textarea>
+      <span id="description-error" class="hidden"></span>
+
+      <input type="number" id="price" placeholder="Price in $" required />
+      <span id="price-error" class="hidden"></span>
+
+      <input type="text" id="category" placeholder="Category" required />
+      <span class="hidden" id="category-error"></span>
+
+      <input type="number" id="stock" placeholder="How many?" required />
+      <span class="hidden" id="stock-error"></span>
+
+      <button type="submit">Add</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script type="module" src="./scripts/productValidation.js"></script>
+  </body>
+</html>

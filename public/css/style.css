@@ -9,6 +9,7 @@
   --text: #1a1a1a;
   --muted: #6b7280;
   --danger: #dc2626;
+  --valid: #07c007;
   --radius: 6px;
   --transition: 0.18s ease;
 }
@@ -35,7 +36,6 @@ body {
   padding: 0 1rem;
 }
 
-
 h1 {
   font-family: "Syne", sans-serif;
   font-weight: 700;
@@ -55,7 +55,7 @@ nav a {
 }
 
 nav a:hover {
-  color:#1d4ed8;
+  color: #1d4ed8;
 }
 
 nav button {
@@ -64,7 +64,7 @@ nav button {
   margin: 5px 10px;
   padding: 10px;
   background-color: #f18989;
-  color:#3b3131;
+  color: #3b3131;
   border: solid #d14d4d;
   border-radius: 10px;
 }
@@ -90,30 +90,6 @@ nav p {
   padding: 2rem 2.25rem;
   margin-top: 1.75rem;
 }
-
-/* .navbar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
-}
-
-.navbar a {
-  font-family: "DM Sans", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: color var(--transition);
-}
-
-.navbar a:hover {
-  color: var(--accent);
-} */
 
 .navbar-spacer {
   flex: 1;
@@ -210,9 +186,7 @@ button[type="submit"]:active,
   border-color: var(--danger);
 }
 
-
 .error {
-  margin-top: 0.75rem;
   font-size: 0.875rem;
   color: var(--danger);
   min-height: 1.25rem;
@@ -247,4 +221,91 @@ button[type="submit"]:active,
   font-size: 1rem;
   color: #fff;
   margin-bottom: 0.25rem;
+}
+
+.invalid {
+  border-color: var(--danger);
+}
+
+.valid {
+  border-color: var(--valid);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hidden {
+  display: none;
+}
+
+.rating-group {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  margin-bottom: 0.25rem;
+}
+
+.rating-group input[type="radio"] {
+  display: none;
+}
+
+.rating-group label {
+  font-size: 2rem;
+  color: var(--border);
+  cursor: pointer;
+  transition:
+    color var(--transition),
+    transform var(--transition);
+  line-height: 1;
+  user-select: none;
+}
+
+.rating-group label:hover,
+.rating-group label:hover ~ label,
+.rating-group input[type="radio"]:checked ~ label {
+  color: #f59e0b;
+}
+
+.rating-group label:hover {
+  transform: scale(1.15);
+}
+
+.rating-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+#product-name {
+  font-family: "Syne", sans-serif;
+  font-size: 1rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 0.5rem;
+  min-height: 1.4em;
+}
+
+.char-counter {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+  margin-top: -0.5rem;
+}
+
+.char-counter.over {
+  color: var(--danger);
+}
+
+#message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  min-height: 1.25rem;
+}
+
+.success {
+  color: var(--valid);
 }

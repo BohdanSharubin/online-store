@@ -8,56 +8,18 @@
 
   <body>
     <h1>Sign in</h1>
-
+    <nav>
+      <a href="/index.html">← Products</a>
+    </nav>
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required />
-      <p id="email-error"></p>
+      <span id="email-error" class="hidden"></span>
       <input type="password" id="password" placeholder="Password" required />
-      <p id="password-error"></p>
+      <span id="password-error" class="hidden"></span>
+      <span id="loginForm-error" class="hidden"></span>
       <button type="submit">Sign in</button>
     </form>
 
-    <script>
-      function showValidationErrors(errors) {
-        document.querySelectorAll('[id$="-error"]').forEach((element) => {
-          element.textContent = "";
-          element.classList.remove("error");
-        });
-
-        errors.forEach(({ field, error }) => {
-          const errorElement = document.getElementById(`${field}-error`);
-          if (errorElement) {
-            errorElement.textContent = error;
-            errorElement.classList.add("error");
-          }
-        });
-      }
-      const BASE_URL = "http://localhost:3000";
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          const body = {
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value,
-          };
-
-          const response = await fetch(`${BASE_URL}/api/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-          });
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            showValidationErrors(data.errors);
-            return;
-          }
-
-          window.location.href = "/index.html";
-        });
-    </script>
+    <script type="module" src="./scripts/validateLogin.js"></script>
   </body>
 </html>
