@@ -36,7 +36,6 @@ body {
   padding: 0 1rem;
 }
 
-
 h1 {
   font-family: "Syne", sans-serif;
   font-weight: 700;
@@ -56,7 +55,7 @@ nav a {
 }
 
 nav a:hover {
-  color:#1d4ed8;
+  color: #1d4ed8;
 }
 
 nav button {
@@ -65,7 +64,7 @@ nav button {
   margin: 5px 10px;
   padding: 10px;
   background-color: #f18989;
-  color:#3b3131;
+  color: #3b3131;
   border: solid #d14d4d;
   border-radius: 10px;
 }
@@ -240,4 +239,71 @@ button:disabled {
 
 .hidden {
   display: none;
+}
+
+.rating-group {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  margin-bottom: 0.25rem;
+}
+
+.rating-group input[type="radio"] {
+  display: none;
+}
+
+.rating-group label {
+  font-size: 2rem;
+  color: var(--border);
+  cursor: pointer;
+  transition:
+    color var(--transition),
+    transform var(--transition);
+  line-height: 1;
+  user-select: none;
+}
+
+.rating-group label:hover,
+.rating-group label:hover ~ label,
+.rating-group input[type="radio"]:checked ~ label {
+  color: #f59e0b;
+}
+
+.rating-group label:hover {
+  transform: scale(1.15);
+}
+
+.rating-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+#product-name {
+  font-family: "Syne", sans-serif;
+  font-size: 1rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 0.5rem;
+  min-height: 1.4em;
+}
+
+.char-counter {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+  margin-top: -0.5rem;
+}
+
+.char-counter.over {
+  color: var(--danger);
+}
+
+#message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #16a34a;
+  min-height: 1.25rem;
 }
