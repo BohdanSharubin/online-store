@@ -10,6 +10,7 @@ const AppError = require("./errors/AppError");
 const clientRouter = require("./routes/clientRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const healthRoutes = require("./routes/healthRoutes");
 
 const app = express();
 app.use(
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/", clientRouter);
+app.use("/", healthRoutes);
 
 app.use(
   asyncHandler(async (req, res) => {
