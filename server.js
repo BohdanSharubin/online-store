@@ -11,15 +11,9 @@ const clientRouter = require("./routes/clientRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const healthRoutes = require("./routes/healthRoutes");
-const { hostname } = require("os");
 
 const app = express();
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  }),
-);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -37,7 +31,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server is running on port ${PORT} on host ${hostname}`);
+  console.log(`Server is running on port ${PORT}`);
   mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
