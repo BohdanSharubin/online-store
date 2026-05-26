@@ -1,89 +1,28 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Online store</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
 
   <body>
-    <h1>Products</h1>
-    <nav>
-      <a href="/login.html">Sign in</a>
-      <p>|</p>
-      <a href="/register.html">Sign up</a>
-      <p>|</p>
-      <a href="/create">Add product</a>
-      <p>|</p>
-      <button id="logoutBtn">Log out</button>
-    </nav>
+    <header>
+      <h1>Products</h1>
+
+      <div id="navContainer">
+        <nav id="mainNav"></nav>
+
+        <div id="userBox">
+          <span id="userName"></span>
+          <span id="userRole" class="user-role"></span>
+        </div>
+      </div>
+    </header>
 
     <ul id="productList"></ul>
-    <script>
-      const BASE_URL = "";
-      async function loadMovies() {
-        const response = await fetch(`${BASE_URL}/api/products?limit=100`);
-        const data = await response.json();
 
-        const list = document.getElementById("productList");
-        list.innerHTML = data.data
-          .map(
-            (product) => `
-              <li class="product-card">
-                <div class="product-card-content">
-                  <div class="product-header">
-                    <h3>${product.name}</h3>
-
-                    <a
-                      class="review-link"
-                      href="/add-review?productId=${product._id}"
-                      title="Add review"
-                    >
-                      <img
-                        src="/assets/reviews.png"
-                        alt="Add review"
-                        width="20"
-                        height="20"
-                      />
-                    </a>
-                  </div>
-
-                  <p class="product-description">
-                    ${product.description || "No description"}
-                  </p>
-
-                  <div class="product-meta">
-                    <span class="price">
-                      $${product.price}
-                    </span>
-
-                    <span class="stock ${product.stock === 0 ? "out" : ""}">
-                      ${
-                        product.stock === 0
-                          ? "Out of stock"
-                          : `In stock: ${product.stock}`
-                      }
-                    </span>
-                  </div>
-                </div>
-              </li>
-              `,
-          )
-          .join("");
-      }
-
-      document
-        .getElementById("logoutBtn")
-        .addEventListener("click", async () => {
-          await fetch(`${BASE_URL}/api/auth/logout`, {
-            method: "POST",
-            credentials: "include",
-          });
-          window.location.href = "/login.html";
-        });
-
-      loadMovies();
-    </script>
+    <script type="module" src="/scripts/renderProducts.js"></script>
   </body>
 </html>
