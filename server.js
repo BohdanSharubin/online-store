@@ -11,9 +11,12 @@ const clientRouter = require("./routes/clientRoutes");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const healthRoutes = require("./routes/healthRoutes");
+const logger = require("./utils/logger");
+const morganMiddleware = require("./middlewares/morgan");
 
 const app = express();
 
+app.use(morganMiddleware);
 app.use(
   cors({
     origin: true,

@@ -1,4 +1,5 @@
 const AppError = require("../errors/AppError");
+const logger = require("../utils/logger");
 
 module.exports = (err, req, res, next) => {
   let statusCode = err.statusCode || 500;
@@ -17,15 +18,17 @@ module.exports = (err, req, res, next) => {
   } else if (err.name === "JsonWebTokenError") {
     statusCode = 401;
     message = "Invalid token. Please log in again";
-  } else if( err.name === "MongoServerError") {
+  } else if (err.name === "MongoServerError") {
     statusCode = 400;
-    message = "Can't create review on product with same user"
+    message = "Can't create review on product with same user";
   }
-  console.error(`${new Date().toISOString()} : ${err}`);
+  logger.error(
+    `${err.statusCode} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`,
+  );
   return res.status(statusCode).json({
     success: false,
     message,
-    ...(Array.isArray(errors) && errors.length > 0 && {errors}),
+    ...(Array.isArray(errors) && errors.length > 0 && { errors }),
     statusCode,
   });
 };
