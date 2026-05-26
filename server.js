@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
@@ -19,10 +20,10 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/", clientRouter);
-app.use(express.static("public"));
 
 app.use(
   asyncHandler(async (req, res) => {
