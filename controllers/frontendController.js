@@ -10,3 +10,8 @@ exports.createProduct = asyncHandler(async (req, res) => {
   const createProductPagePath = path.join(__dirname, "../private/create.html");
   res.sendFile(createProductPagePath);
 });
+
+exports.mainPage = asyncHandler(async (req, res) => {
+  const mainPagePath = path.join(__dirname, "../public/index.html");
+  res.sendFile(mainPagePath);
+});
