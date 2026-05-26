@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
 
-router.get("/health", async (req, res) => {
+router.get("/", async (req, res) => {
   const dbOk = mongoose.connection.readyState === 1;
   res.status(dbOk ? 200 : 503).json({
     status: dbOk ? "ok" : "error",

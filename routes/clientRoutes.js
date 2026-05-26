@@ -6,4 +6,5 @@ const controller = require("../controllers/frontendController");
 router.get("/", controller.mainPage);
 router.get("/create", protectStatic, controller.createProduct);
 router.get("/add-review", protectStatic, controller.addReview);
+router.get("*", controller.mainPage);
 module.exports = router;
