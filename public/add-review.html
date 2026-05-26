@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add Review</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <h1>Add Review</h1>
+    <nav>
+      <a href="/index.html">← Products</a>
+    </nav>
+
+    <p id="product-name">Loading product…</p>
+
+    <form id="reviewForm">
+      <span class="rating-label">Your rating</span>
+      <div class="rating-group" id="ratingGroup">
+        <input type="radio" name="rating" id="star5" value="5" />
+        <label for="star5" title="5 stars">★</label>
+        <input type="radio" name="rating" id="star4" value="4" />
+        <label for="star4" title="4 stars">★</label>
+        <input type="radio" name="rating" id="star3" value="3" />
+        <label for="star3" title="3 stars">★</label>
+        <input type="radio" name="rating" id="star2" value="2" />
+        <label for="star2" title="2 stars">★</label>
+        <input type="radio" name="rating" id="star1" value="1" />
+        <label for="star1" title="1 star">★</label>
+      </div>
+      <p id="rating-error" class="error"></p>
+
+      <textarea
+        id="comment"
+        placeholder="Share your experience"
+        maxlength="500"
+      ></textarea>
+      <p class="char-counter"><span id="charCount">0</span> / 500</p>
+      <p id="comment-error" class="error"></p>
+
+      <button type="submit">Submit Review</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script type="module" src="./scripts/validateReview.js"></script>
+    <!-- <script>
+      const BASE_URL = "http://localhost:3000";
+
+      // Get productId from URL: /add-review.html?productId=...
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get("productId");
+
+      if (!productId) {
+        document.getElementById("product-name").textContent =
+          "No product specified.";
+      } else {
+        fetch(`${BASE_URL}/api/products/${productId}`)
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.success) {
+              document.getElementById("product-name").textContent =
+                data.data.name;
+            }
+          })
+          .catch(() => {
+            document.getElementById("product-name").textContent =
+              "Product not found";
+          });
+      }
+
+      // Character counter
+      const commentEl = document.getElementById("comment");
+      const charCount = document.getElementById("charCount");
+      const charCounter = charCount.parentElement;
+
+      commentEl.addEventListener("input", () => {
+        const len = commentEl.value.length;
+        charCount.textContent = len;
+        charCounter.classList.toggle("over", len > 500);
+      });
+
+      // Form submit
+      document
+        .getElementById("reviewForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const ratingInput = document.querySelector(
+            'input[name="rating"]:checked',
+          );
+          const rating = ratingInput ? Number(ratingInput.value) : null;
+          const comment = commentEl.value.trim();
+
+          const errors = validateReview({ rating, comment });
+          showReviewErrors(errors);
+          if (errors.length > 0) return;
+
+          const response = await fetch(
+            `${BASE_URL}/api/products/${productId}/reviews`,
+            {
+              method: "POST",
+              credentials: "include",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ rating, comment }),
+            },
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            if (data.errors) {
+              showReviewErrors(data.errors);
+            } else {
+              document.getElementById("message").style.color = "var(--danger)";
+              document.getElementById("message").textContent =
+                data.message || "Failed to submit review.";
+            }
+            return;
+          }
+
+          document.getElementById("message").textContent =
+            "Review submitted! Redirecting…";
+          setTimeout(() => (window.location.href = "/index.html"), 1200);
+        });
+    </script> -->
+  </body>
+</html>
