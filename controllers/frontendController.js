@@ -6,7 +6,7 @@ exports.addReview = asyncHandler(async (req, res) => {
   res.sendFile(reviewPagePath);
 });
 
- exports.createProduct = asyncHandler(async (req, res) => {
-    const createProductPagePath = path.join(__dirname, "../private/create.html");
+exports.createProduct = asyncHandler(async (req, res) => {
+  const createProductPagePath = path.join(__dirname, "../private/create.html");
   res.sendFile(createProductPagePath);
- })
+});
