@@ -73,28 +73,6 @@ nav p {
   padding: 10px;
 }
 
-.page-wrapper {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 3rem 0 4rem;
-}
-
-.page-wrapper--wide {
-  max-width: 860px;
-}
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem 2.25rem;
-  margin-top: 1.75rem;
-}
-
-.navbar-spacer {
-  flex: 1;
-}
-
 form {
   display: flex;
   flex-direction: column;
@@ -164,26 +142,6 @@ button[type="submit"]:hover,
 button[type="submit"]:active,
 .btn-primary:active {
   transform: translateY(0);
-}
-
-.btn-ghost {
-  font-family: "DM Sans", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.4rem 1rem;
-  cursor: pointer;
-  transition:
-    color var(--transition),
-    border-color var(--transition);
-}
-
-.btn-ghost:hover {
-  color: var(--danger);
-  border-color: var(--danger);
 }
 
 .error {
