@@ -10,6 +10,11 @@ const morganFormat =
     ? ":method :url :status :res[content-length] - :response-time ms"
     : "dev";
 
-const morganMiddleware = morgan(morganFormat, { stream });
+const morganMiddleware = morgan(morganFormat, {
+  stream,
+  skip: (req, res) => {
+    return req.originalUrl === "/health" || req.path === "/health";
+  },
+});
 
 module.exports = morganMiddleware;
