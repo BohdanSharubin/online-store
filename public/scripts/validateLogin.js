@@ -6,14 +6,14 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const submitButton = form.querySelector("button");
 const errorsState = {};
+const messageElement = document.getElementById("message");
 
 const _showFieldError = (field, error) =>
   showFieldError(field, error, errorsState, updateSubmitButtonState);
 
 function clearFormErrors() {
-  const formError = document.getElementById("loginForm-error");
-  formError.textContent = "";
-  formError.classList.add("hidden");
+  messageElement.textContent = "";
+  messageElement.classList.add("hidden");
   delete errorsState["loginForm"];
 }
 
@@ -64,7 +64,8 @@ form.addEventListener("submit", async (e) => {
       return;
     }
     if (data.message) {
-      _showFieldError("loginForm", data.message);
+      messageElement.textContent = data.message;
+      messageElement.className = "error";
       return;
     }
   }

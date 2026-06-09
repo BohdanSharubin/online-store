@@ -1,3 +1,5 @@
+import { escapeHTML } from "./validation.js";
+
 const BASE_URL = "";
 
 async function fetchCurrentUser() {
@@ -85,15 +87,15 @@ function renderProducts(products, user) {
       return `
               <li class="product-card">
                 <div class="product-meta">
-                  <h3>${p.name}</h3>
+                  <h3>${escapeHTML(p.name)}</h3>
                   <span class="stock ${p.stock === 0 ? "out" : ""}">
                     ${p.stock === 0 ? "Out of stock" : `In stock: ${p.stock}`}
                   </span>
                 </div>
-                <p class="product-description">${p.description || "No description"}</p>
+                <p class="product-description">${escapeHTML(p.description) || "No description"}</p>
                 <div class="product-meta">
                   <span class="price">$${p.price}</span>
-                  <span style="font-size:0.8rem; color: gray;">${p.category || "General"}</span>
+                  <span class="product-category">${escapeHTML(p.category) || "General"}</span>
                 </div>
                 <div class="card-actions">
                   <a class="btn-card btn-card--reviews" href="/reviews.html?productId=${p._id}">

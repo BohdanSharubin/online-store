@@ -45,7 +45,7 @@ exports.updateProduct = async (id, data, currentUser) => {
   if (!product) {
     throw AppError.notFound("Product not found");
   } else if (
-    product.createdBy.toString() !== currentUser._id.toString() ||
+    product.createdBy.toString() !== currentUser._id.toString() &&
     currentUser.role !== "admin"
   )
     throw AppError.forbidden("You have no rights to update this product");
@@ -55,12 +55,12 @@ exports.updateProduct = async (id, data, currentUser) => {
   }
 
   Object.assign(product, data);
-  product.save();
+  await product.save();
   return { ...product.toObject(), price: money.fromCents(product.price) };
 };
 
 exports.deleteProduct = async (id) => {
-  const product = Product.findByIdAndDelete(id);
+  const product = await Product.findByIdAndDelete(id);
   if (!product) {
     throw AppError.notFound("Product not found");
   }

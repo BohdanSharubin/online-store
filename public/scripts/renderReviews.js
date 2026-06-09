@@ -1,3 +1,5 @@
+import { escapeHTML } from "./validation.js";
+
 const BASE_URL = "";
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("productId");
@@ -88,10 +90,33 @@ async function init() {
                 <div class="review-stars">${stars(r.rating)}</div>
               </div>
               <span class="review-date">${formatDate(r.createdAt)}</span>
-              <p class="review-comment">${r.comment}</p>
+              <p class="review-comment collapsed">${escapeHTML(r.comment)}</p>
+              <button class="toggle-review-btn">Read more</button>
             </li>`,
     )
     .join("");
+  const reviewCards = list.querySelectorAll(".review-card");
+
+  reviewCards.forEach((card) => {
+    const textElement = card.querySelector(".review-comment");
+    const toggleBtn = card.querySelector(".toggle-review-btn");
+
+    if (textElement.scrollHeight > textElement.clientHeight) {
+      toggleBtn.style.display = "inline-block";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      const isCollapsed = textElement.classList.contains("collapsed");
+
+      if (isCollapsed) {
+        textElement.classList.remove("collapsed");
+        toggleBtn.textContent = "Show less";
+      } else {
+        textElement.classList.add("collapsed");
+        toggleBtn.textContent = "Read more";
+      }
+    });
+  });
 }
 
 init();
