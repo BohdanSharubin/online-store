@@ -348,6 +348,34 @@ button:disabled {
   font-size: 0.9rem;
   color: var(--text);
   line-height: 1.55;
+  word-break: break-word;
+  word-wrap: break-word;
+  transition: max-height 0.3s ease;
+}
+
+.review-comment.collapsed {
+  display: -webkit-box;
+  line-clamp: 3;        /* Кількість рядків, які видно за замовчуванням */
+  -webkit-line-clamp: 3;        /* Кількість рядків, які видно за замовчуванням */
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+
+/* Стиль для кнопки розгортання */
+.toggle-review-btn {
+  background: none;
+  border: none;
+  color: #007bff; /* або твій var(--primary) */
+  padding: 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 5px;
+  display: none; /* За замовчуванням прихована, покажемо через JS якщо текст дійсно довгий */
+}
+
+.toggle-review-btn:hover {
+  text-decoration: underline;
 }
 
 .empty-state {
@@ -441,5 +469,41 @@ header {
 }
 
 #addReviewBtn {
-  display: none
+  display: none;
+}
+
+.product-description {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.55;
+  max-height: 3.1em;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.product-meta span[style*="color: gray;"] {
+  display: inline-block;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-category {
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

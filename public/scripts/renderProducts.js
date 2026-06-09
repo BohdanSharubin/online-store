@@ -95,7 +95,7 @@ function renderProducts(products, user) {
                 <p class="product-description">${escapeHTML(p.description) || "No description"}</p>
                 <div class="product-meta">
                   <span class="price">$${p.price}</span>
-                  <span style="font-size:0.8rem; color: gray;">${escapeHTML(p.category) || "General"}</span>
+                  <span class="product-category">${escapeHTML(p.category) || "General"}</span>
                 </div>
                 <div class="card-actions">
                   <a class="btn-card btn-card--reviews" href="/reviews.html?productId=${p._id}">
