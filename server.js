@@ -13,6 +13,8 @@ const cookieParser = require("cookie-parser");
 const healthRoutes = require("./routes/healthRoutes");
 const logger = require("./utils/logger");
 const morganMiddleware = require("./middlewares/morgan");
+const { swaggerUi, specs } = require("./utils/swagger");
+const swaggerJSDoc = require("swagger-jsdoc");
 
 const app = express();
 
@@ -25,6 +27,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
