@@ -45,7 +45,7 @@ exports.updateProduct = async (id, data, currentUser) => {
   if (!product) {
     throw AppError.notFound("Product not found");
   } else if (
-    product.createdBy.toString() !== currentUser._id.toString() ||
+    product.createdBy.toString() !== currentUser._id.toString() &&
     currentUser.role !== "admin"
   )
     throw AppError.forbidden("You have no rights to update this product");
