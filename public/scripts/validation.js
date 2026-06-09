@@ -32,8 +32,8 @@ export function validateField(field, value, passwordInput = null) {
       if (!value.trim()) return "Comment is required";
       if (value.trim().length < 10)
         return "Comment must be at least 10 characters";
-      if (value.trim().length > 500)
-        return "Comment must be no more than 500 characters";
+      if (value.trim().length > 300)
+        return "Comment must be no more than 300 characters";
       return "";
     case "productName":
       if (!value.trim()) return "Product name is required";
@@ -112,4 +112,16 @@ export function showFieldError(
   }
 
   updateSubmitButtonState();
+}
+
+export function escapeHTML(str) {
+  if (!str) {
+    return "";
+  }
+  return String(str)
+    .replace(/&/g, "&amp")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
