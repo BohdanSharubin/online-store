@@ -20,7 +20,7 @@ exports.deleteReview = async (reviewId, currentUser) => {
   }
   if (
     review.user.toString() !== currentUser._id.toString() &&
-    currentUser.role !== admin
+    currentUser.role !== "admin"
   ) {
     throw AppError.forbidden("You are not allowed to delete this review");
   }
