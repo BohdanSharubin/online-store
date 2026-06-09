@@ -1,3 +1,5 @@
+import { escapeHTML } from "./validation.js";
+
 const BASE_URL = "";
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("productId");
@@ -88,7 +90,7 @@ async function init() {
                 <div class="review-stars">${stars(r.rating)}</div>
               </div>
               <span class="review-date">${formatDate(r.createdAt)}</span>
-              <p class="review-comment">${r.comment}</p>
+              <p class="review-comment">${escapeHTML(r.comment)}</p>
             </li>`,
     )
     .join("");
