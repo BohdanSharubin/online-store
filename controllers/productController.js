@@ -23,7 +23,7 @@ exports.getProduct = asyncHandler(async (req, res) => {
 });
 
 exports.createProduct = asyncHandler(async (req, res) => {
-  const product = await productService.createProduct(req.body, req.user._id);
+  const product = await productService.createProduct(req.validated.body, req.user._id);
   res.status(201).json({
     success: true,
     data: product,
