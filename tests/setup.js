@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const { MongoInMemoryServer } = require("mongodb-memory-server");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 let mongoServer;
 
 beforeAll(async () => {
-  mongoServer = await MongoInMemoryServer.create();
+  mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
 
   process.env.JWT_SECRET = "test_supertest_secret_key_for_jwt";
@@ -22,5 +22,7 @@ afterEach(async () => {
 
 afterAll(async () => {
   await mongoose.disconnect();
-  await mongoServer.stop();
+  if (mongoServer) {
+    await mongoServer.stop();
+  }
 });
