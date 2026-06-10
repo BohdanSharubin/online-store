@@ -1,0 +1,44 @@
+require("dotenv").config();
+const path = require("path");
+const express = require("express");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/authRoutes");
+const errorHandler = require("./middlewares/errorHandler");
+const productRoutes = require("./routes/productRoutes");
+const asyncHandler = require("./middlewares/asyncHandler");
+const AppError = require("./errors/AppError");
+const clientRouter = require("./routes/clientRoutes");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const healthRoutes = require("./routes/healthRoutes");
+const logger = require("./utils/logger");
+const morganMiddleware = require("./middlewares/morgan");
+const { swaggerUi, specs } = require("./utils/swagger");
+const swaggerJSDoc = require("swagger-jsdoc");
+
+const app = express();
+
+app.use(morganMiddleware);
+app.use(
+  cors({
+    origin: true,
+    credentials: "include",
+  }),
+);
+app.use(express.json());
+app.use(cookieParser());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/health", healthRoutes);
+app.use("/", clientRouter);
+
+app.use(
+  asyncHandler(async (req, res) => {
+    throw AppError.notFound(`Route ${req.originalUrl} not found`);
+  }),
+);
+app.use(errorHandler);
+
+module.exports = app;
