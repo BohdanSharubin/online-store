@@ -9,7 +9,7 @@
     "test": "jest --runInBand --detectOpenHandles"
   },
   "jest": {
-    "testEnviroment": "node",
+    "testEnvironment": "node",
     "setupFilesAfterEnv": ["./tests/setup.js"]
   },
   "repository": {
