@@ -1,0 +1,29 @@
+name: Create Deployment PR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request to deployment branch
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          branch: deployment-sync 
+          base: deployment       
+          title: "Release: Merge main into deployment"
+          body: |
+            Автоматично згенерований Pull Request для деплою нової версії додатку.
+            
+            - **Джерело:** Зміни з гілки `main`
+            - **Тригер:** Автоматичний пуш / злиття PR
+          labels: |
+            deployment
+            automated
