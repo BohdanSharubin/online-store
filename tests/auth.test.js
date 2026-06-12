@@ -174,4 +174,44 @@ describe("Auth API Endpoints", () => {
       expect(response.body.message).toBe("Wrong email or password");
     });
   });
+
+  describe("GET /api/auth/me", () => {
+    it("should return user information wnen a valid token cookie is provided", async () => {
+      const validUserData = {
+        name: "User",
+        email: "test@example.org",
+        password: "password123",
+        confirmPassword: "password123",
+      };
+
+      const registerResponse = await request(app)
+        .post("/api/auth/register")
+        .send(validUserData);
+
+      const authCookie = registerResponse.headers["set-cookie"];
+
+      expect(authCookie).toBeDefined();
+
+      const response = await request(app)
+        .get("/api/auth/me")
+        .set("Cookie", authCookie);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(response.body.user).toBeDefined();
+      expect(response.body.user.email).toBe(validUserData.email);
+      expect(response.body.user.name).toBe(validUserData.name);
+      expect(response.body.user.role).toBe("user");
+
+      expect(response.body.user).not.toHaveProperty("password");
+    });
+
+    it("should fail wnen user is not login", async () => {
+      const response = await request(app).get("/api/auth/me");
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe("Access denied. Token is missing");
+    });
+  });
 });
