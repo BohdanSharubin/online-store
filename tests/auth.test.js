@@ -53,5 +53,27 @@ describe("Auth API Endpoints", () => {
         ]),
       );
     });
+
+    it("should fail registration if email already in use", async () => {
+      const invalidUserData = {
+        name: "Bad User",
+        email: "test@example.org",
+        password: "password123",
+        confirmPassword: "password123",
+      };
+      const {name, email, password} = invalidUserData;
+      await User.create( {name, email, password});
+
+      const response = await request(app)
+        .post("/api/auth/register")
+        .send(invalidUserData);
+
+      expect(response.statusCode).toBe(409);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe("User with this email already exists");
+      
+    });
   });
+
+  // describe("")
 });
