@@ -214,4 +214,42 @@ describe("Auth API Endpoints", () => {
       expect(response.body.message).toBe("Access denied. Token is missing");
     });
   });
+
+  describe("POST /api/auth/logout", () => {
+    it("should remove user cookie wnen a valid token cookie is provided", async () => {
+      const validUserData = {
+        name: "User",
+        email: "test@example.org",
+        password: "password123",
+        confirmPassword: "password123",
+      };
+
+      const registerResponse = await request(app)
+        .post("/api/auth/register")
+        .send(validUserData);
+
+      const authCookie = registerResponse.headers["set-cookie"];
+
+      expect(authCookie).toBeDefined();
+
+      const response = await request(app)
+        .post("/api/auth/logout")
+        .set("Cookie", authCookie);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.success).toBe(true);
+      expect(response.body.message).toBeDefined();
+      expect(response.body.message).toBe("Logout completed");
+
+      expect(response.headers["set-cookie"][0]).toContain("Max-Age=0");
+    });
+
+    it("should fail wnen user is not login", async () => {
+      const response = await request(app).post("/api/auth/logout");
+
+      expect(response.statusCode).toBe(401);
+      expect(response.body.success).toBe(false);
+      expect(response.body.message).toBe("Access denied. Token is missing");
+    });
+  });
 });
